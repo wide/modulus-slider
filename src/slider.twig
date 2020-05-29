@@ -1,0 +1,23 @@
+{% set component = component | default('slider') %}
+{% set webcomponent = webcomponent | default(false) %}
+{% set classlist = { 
+  main:     'slider swiper-container',
+  wrapper:  'swiper-wrapper',
+  slide:    'slider_slide swiper-slide'
+} | merge(classlist | default({})) %}
+
+{% set tagstart = webcomponent ?: ('div is="' ~ component ~ '"') %}
+{% set tagend = webcomponent ?: 'div' %}
+
+<{{ tagstart }} class="{{ classlist.main }} {{ class }}" id="{{ id }}"
+  {% for attr, value in dataset %}data-{{ attr }}="{{ value }}"{% endfor %}>
+  <div class="{{ classlist.wrapper }}">
+    {% block content %}
+      {% for slide in slides %}
+        <div class="{{ classlist.slide }}">
+          {{ slide | raw }}
+        </div>
+      {% endfor %}
+    {% endblock %}
+  </div>
+</{{ tagend }}>
