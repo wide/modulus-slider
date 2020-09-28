@@ -1,4 +1,4 @@
-import Component from '@wide/modulus/src/component'
+import Component from '@wide/modulus/lib/component'
 import { seek } from '@wide/modulus'
 import hotkeys from 'hotkeys-js'
 import Swiper from 'swiper'
