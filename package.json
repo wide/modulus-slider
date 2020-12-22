@@ -1,6 +1,6 @@
 {
   "name": "@wide/modulus-slider",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "license": "MIT",
   "author": "Aymeric Assier (https://github.com/myeti)",
   "contributors": [
@@ -8,8 +8,8 @@
     "Julien Martins Da Costa (https://github.com/jdacosta)"
   ],
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/wide/modulus-slider.git"
+    "type": "git",
+    "url": "https://github.com/wide/modulus-slider.git"
   },
   "main": "lib",
   "engines": {

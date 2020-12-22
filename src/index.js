@@ -1,4 +1,4 @@
-import Component from '@wide/modulus/src/component'
+import Component from '@wide/modulus/lib/component'
 import { seek } from '@wide/modulus'
 import hotkeys from 'hotkeys-js'
 import Swiper from 'swiper'
@@ -36,6 +36,12 @@ export const DEFAULT_CLASSLIST = {
  */
 export const FOCUSABLES = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
 
+/**
+ * Non focusable element selector
+ * @type {String}
+ */
+export const NON_FOCUSABLES = '[data-focusable="0"]'
+
 
 /**
  * Slider Component
@@ -50,7 +56,6 @@ export default class Slider extends Component {
    * @param {Object<string, String>} opts.classlist 
    */
   run({ classlist, config } = {}) {
-
     /**
      * Swiper instance
      * @type {Swiper}
@@ -105,6 +110,12 @@ export default class Slider extends Component {
       this.config.spaceBetween = parseInt(this.dataset.spaceBetween)
     }
 
+    // Set the focusable elements by excluding the non-focusable elements
+    this.focusablesSelector = FOCUSABLES.split(',').map(f => `${f}:not(${NON_FOCUSABLES})`.trim())
+
+    // Handle accessibility
+    this.handleAccessibility()
+
     // instanciate slider
     this.createSlider()
     this.enableKeyboardNav()
@@ -120,10 +131,21 @@ export default class Slider extends Component {
 
 
   /**
+   * Handle focusable elements
+   */
+  handleAccessibility() {
+    const nonFocusables = this.children.querySelectorAll(NON_FOCUSABLES)
+    for (let j = 0; j < nonFocusables.length; j++) {
+      nonFocusables[j].setAttribute('aria-hidden', true)
+      nonFocusables[j].setAttribute('tabindex', -1)
+    }
+  }
+
+
+  /**
    * Instanciate Swiper
    */
   createSlider() {
-
     // set default necessary config values
     this.config.watchSlidesVisibility = true
     this.config.navigation = this.config.navigation || {
@@ -178,7 +200,6 @@ export default class Slider extends Component {
    * Re-affect visibility and focus for accessibility purpose
    */
   onSlideChange() {
-
     // set aria-hidden and tabindex
     const slides = this.children(`.${this.classlist.slide}`)
     for(let i = 0; i < slides.length; i++) {
@@ -189,7 +210,7 @@ export default class Slider extends Component {
       slides[i].setAttribute('tabindex', isVisible ? 0 : -1)
 
       // and to its focusable content
-      const focusables = slides[i].querySelectorAll(FOCUSABLES)
+      const focusables = slides[i].querySelectorAll(this.focusablesSelector)
       for (let j = 0; j < focusables.length; j++) {
         focusables[j].setAttribute('aria-hidden', !isVisible)
         focusables[j].setAttribute('tabindex', isVisible ? 0 : -1)
