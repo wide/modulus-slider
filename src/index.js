@@ -134,7 +134,7 @@ export default class Slider extends Component {
    * Handle focusable elements
    */
   handleAccessibility() {
-    const nonFocusables = this.children.querySelectorAll(NON_FOCUSABLES)
+    const nonFocusables = this.children(NON_FOCUSABLES)
     for (let j = 0; j < nonFocusables.length; j++) {
       nonFocusables[j].setAttribute('aria-hidden', true)
       nonFocusables[j].setAttribute('tabindex', -1)
