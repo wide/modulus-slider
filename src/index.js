@@ -31,6 +31,24 @@ export const DEFAULT_CLASSLIST = {
 }
 
 /**
+ * Focusable element data attribute
+ * @type {String}
+ */
+export const FOCUSABLE_DATA_ATTRIBUTE = 'data-focusable'
+
+/**
+ * Focusable element data attribute's value
+ * @type {String}
+ */
+export const FOCUSABLE_DATA_ATTRIBUTE_VALUE = 1
+
+/**
+ * Non focusable element data attribute's value
+ * @type {String}
+ */
+export const NON_FOCUSABLE_DATA_ATTRIBUTE_VALUE = 0
+
+/**
  * Focusable element selector
  * @type {String}
  */
@@ -40,7 +58,7 @@ export const FOCUSABLES = 'button, [href], input, select, textarea, [tabindex]:n
  * Non focusable element selector
  * @type {String}
  */
-export const NON_FOCUSABLES = '[data-focusable="0"]'
+export const NON_FOCUSABLE = `[${FOCUSABLE_DATA_ATTRIBUTE}="${NON_FOCUSABLE_DATA_ATTRIBUTE_VALUE}"]`
 
 
 /**
@@ -111,7 +129,7 @@ export default class Slider extends Component {
     }
 
     // Set the focusable elements by excluding the non-focusable elements
-    this.focusablesSelector = FOCUSABLES.split(',').map(f => `${f}:not(${NON_FOCUSABLES})`.trim())
+    this.focusablesSelector = FOCUSABLES.split(',').map(f => `${f}:not(${NON_FOCUSABLE})`.trim())
 
     // Handle accessibility
     this.handleAccessibility()
@@ -134,7 +152,7 @@ export default class Slider extends Component {
    * Handle focusable elements
    */
   handleAccessibility() {
-    const nonFocusables = this.children(NON_FOCUSABLES)
+    const nonFocusables = this.children(NON_FOCUSABLE)
     for (let j = 0; j < nonFocusables.length; j++) {
       nonFocusables[j].setAttribute('aria-hidden', true)
       nonFocusables[j].setAttribute('tabindex', -1)
@@ -205,9 +223,16 @@ export default class Slider extends Component {
     for(let i = 0; i < slides.length; i++) {
 
       // to slide
-      const isVisible = slides[i].classList.contains(this.classlist.slideVisible)
-      slides[i].setAttribute('aria-hidden', !isVisible)
-      slides[i].setAttribute('tabindex', isVisible ? 0 : -1)
+      const slide = slides[i]
+      // Set aria hidden
+      const isVisible = slide.classList.contains(this.classlist.slideVisible)
+      slide.setAttribute('aria-hidden', !isVisible)
+      // Set tabindex if slide is focusable
+      const slideFocusableAttribute = slide.getAttribute(FOCUSABLE_DATA_ATTRIBUTE)
+      const isSlideFocusable = slideFocusableAttribute && slideFocusableAttribute == FOCUSABLE_DATA_ATTRIBUTE_VALUE
+      if (isSlideFocusable) {
+        slide.setAttribute('tabindex', isVisible ? 0 : -1)
+      }
 
       // and to its focusable content
       const focusables = slides[i].querySelectorAll(this.focusablesSelector)
