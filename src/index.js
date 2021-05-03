@@ -101,13 +101,13 @@ export default class Slider extends Component {
      * Swiper config
      * @type {Object}
      */
-    this.config = Object.assign(DEFAULT_CONFIG, config)
+    this.config = Object.assign({}, DEFAULT_CONFIG, config)
 
     /**
      * Element's CSS classes
      * @type {Object<string, String>}
      */
-    this.classlist = Object.assign(DEFAULT_CLASSLIST, classlist)
+    this.classlist = Object.assign({}, DEFAULT_CLASSLIST, classlist)
 
     /**
      * Control elements
