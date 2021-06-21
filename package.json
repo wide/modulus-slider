@@ -1,6 +1,6 @@
 {
   "name": "@wide/modulus-slider",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "license": "MIT",
   "author": "Aymeric Assier (https://github.com/myeti)",
   "contributors": [
@@ -20,9 +20,9 @@
     "prepare": "rimraf lib/ && npm run build"
   },
   "dependencies": {
-    "@wide/modulus": "^2.1.0",
-    "hotkeys-js": "^3.8.5",
-    "swiper": "^5.3.6"
+    "@wide/modulus": "^2.1.1",
+    "hotkeys-js": "^3.8.7",
+    "swiper": "^6.7.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.3",
