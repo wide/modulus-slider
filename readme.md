@@ -71,6 +71,7 @@ class MySlider extends Slider {
 Or programmatically instanciate a slider:
 ```js
 import Slider from '@wide/modulus-slider'
+import Pagination from 'swiper/esm/components/pagination/pagination'
 
 const DEFAULT_CLASSLIST = {
   prev: 'swiper-button-prev',
@@ -82,9 +83,7 @@ const DEFAULT_CONFIG = {
 }
 
 const DEFAULT_MODULES = {
-  Pagination: await (
-      await import('swiper/esm/components/pagination/pagination')
-  ).default,
+  Pagination
 }
 
 const slider = Slider.create(el, name, DEFAULT_CLASSLIST, DEFAULT_CONFIG, DEFAULT_MODULES) 
