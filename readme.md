@@ -72,10 +72,27 @@ Or programmatically instanciate a slider:
 ```js
 import Slider from '@wide/modulus-slider'
 
-const slider = Slider.create(el, name, {
-    slidesPerView: 1
-}) 
+const DEFAULT_CLASSLIST = {
+  prev: 'swiper-button-prev',
+  next: 'swiper-button-next'
+}
+
+const DEFAULT_CONFIG = {
+  autoplay: false
+}
+
+const DEFAULT_MODULES = {
+  Pagination: await (
+      await import('swiper/esm/components/pagination/pagination')
+  ).default,
+}
+
+const slider = Slider.create(el, name, DEFAULT_CLASSLIST, DEFAULT_CONFIG, DEFAULT_MODULES) 
 ```
+
+
+
+## 
 
 
 ## Libraries
