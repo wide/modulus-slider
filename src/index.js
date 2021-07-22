@@ -1,8 +1,16 @@
 import Component from '@wide/modulus/lib/component'
 import { seek } from '@wide/modulus'
 import hotkeys from 'hotkeys-js'
-import Swiper from 'swiper/bundle'
+import Swiper from 'swiper/esm/components/core/core-class'
+import Navigation from 'swiper/esm/components/navigation/navigation'
 
+/**
+ * Default Swiper modules
+ * @type {Object<Object>}
+ */
+export const DEFAULT_MODULES = {
+  Navigation
+}
 
 /**
  * Default Swiper config
@@ -70,10 +78,11 @@ export default class Slider extends Component {
   /**
    * Initialize slider
    * @param {Object} opts
-   * @param {Object} opts.config 
-   * @param {Object<string, String>} opts.classlist 
+   * @param {Object<string, String>} opts.classlist
+   * @param {Object} opts.config
+   * @param {Object} opts.modules
    */
-  run({ classlist, config } = {}) {
+  run({ classlist = {}, config = {}, modules = {} } = {}) {
     /**
      * Swiper instance
      * @type {Swiper}
@@ -102,6 +111,11 @@ export default class Slider extends Component {
      * @type {Object}
      */
     this.config = Object.assign({}, DEFAULT_CONFIG, config)
+
+    /**
+     * Swiper modules
+     */
+    this.modules = Object.assign({}, DEFAULT_MODULES, modules)
 
     /**
      * Element's CSS classes
@@ -181,6 +195,9 @@ export default class Slider extends Component {
       nextSlideMessage: this.arialLabels.nextSlide,
       paginationBulletMessage: this.arialLabels.paginationBullet + ' {{index}}'
     }
+
+    // set Swiper modules
+    Swiper.use(Object.values(this.modules))
 
     // instanciate with config
     this.swiper = new Swiper(this.el, this.config)
