@@ -1,1 +1,10 @@
-@import '../node_modules/swiper/swiper';
+// @import '../node_modules/swiper/swiper';
+
+// swiper core styles
+@import 'swiper/css';
+
+// modules styles
+@import 'swiper/css/a11y';
+@import 'swiper/css/autoplay';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';

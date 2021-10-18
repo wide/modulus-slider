@@ -1,15 +1,17 @@
 import Component from '@wide/modulus/lib/component'
 import { seek } from '@wide/modulus'
 import hotkeys from 'hotkeys-js'
-import Swiper from 'swiper/esm/components/core/core-class'
-import Navigation from 'swiper/esm/components/navigation/navigation'
+import Swiper, { A11y, Autoplay, Navigation, Pagination } from 'swiper'
 
 /**
  * Default Swiper modules
  * @type {Array<Object>}
  */
 export const DEFAULT_MODULES = [
-  Navigation
+  A11y,
+  Autoplay,
+  Navigation,
+  Pagination
 ]
 
 /**
@@ -18,7 +20,6 @@ export const DEFAULT_MODULES = [
  */
 export const DEFAULT_CONFIG = {
   loop: true,
-  autoplay: true,
   spaceBetween: 40,
   slidesPerView: 3
 }
@@ -174,21 +175,35 @@ export default class Slider extends Component {
   createSlider() {
     // set default necessary config values
     this.config.modules = this.config.modules || this.DEFAULT_MODULES
-    this.config.watchSlidesVisibility = true
-    this.config.navigation = this.config.navigation || {
-      prevEl: `.${this.classlist.prev}`,
-      nextEl: `.${this.classlist.next}`
+    
+    this.config.watchSlidesProgress = true
+
+    if (~this.config.modules.indexOf(A11y)) {
+      this.config.a11y = this.config.a11y || {
+        prevSlideMessage: this.arialLabels.prevSlide,
+        nextSlideMessage: this.arialLabels.nextSlide,
+        paginationBulletMessage: this.arialLabels.paginationBullet + ' {{index}}'
+      }
     }
-    this.config.pagination = this.config.pagination || {
-      el: `.${this.classlist.pagination}`,
-      type: 'bullets',
-      bulletElement: 'button',
-      clickable: true
+
+    if (~this.config.modules.indexOf(Autoplay)) {
+      this.config.autoplay = this.config.autoplay || true
     }
-    this.config.a11y = this.config.a11y || {
-      prevSlideMessage: this.arialLabels.prevSlide,
-      nextSlideMessage: this.arialLabels.nextSlide,
-      paginationBulletMessage: this.arialLabels.paginationBullet + ' {{index}}'
+
+    if (~this.config.modules.indexOf(Navigation)) {
+      this.config.navigation = this.config.navigation || {
+        prevEl: `.${this.classlist.prev}`,
+        nextEl: `.${this.classlist.next}`
+      }
+    }
+
+    if (~this.config.modules.indexOf(Pagination)) {
+      this.config.pagination = this.config.pagination || {
+        el: `.${this.classlist.pagination}`,
+        type: 'bullets',
+        bulletElement: 'button',
+        clickable: true
+      }
     }
 
     // instanciate with config
@@ -214,9 +229,10 @@ export default class Slider extends Component {
    * Sync with another swiper
    */
   syncControl() {
-    if(this.dataset.sync && !this.swiper.params.controller) {
+    if (this.dataset.sync && !this.swiper.params.controller) {
       const other = seek(this.name, this.dataset.sync)
-      if(other) {
+
+      if (other) {
         this.swiper.params.controller = { control: other.swiper }
       }
     }
@@ -229,8 +245,8 @@ export default class Slider extends Component {
   onSlideChange() {
     // set aria-hidden and tabindex
     const slides = this.children(`.${this.classlist.slide}`)
-    for(let i = 0; i < slides.length; i++) {
 
+    for(let i = 0; i < slides.length; i++) {
       // to slide
       const slide = slides[i]
       // Set aria hidden
@@ -272,6 +288,7 @@ export default class Slider extends Component {
    */
   flagManualChange() {
     this.swiper.on('touchEnd', e => this.manualChange = true)
+
     for (let prop in this.els) {
       if (this.els[prop] instanceof HTMLElement) {
         this.els[prop].addEventListener('click', e => this.manualChange = true)
