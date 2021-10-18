@@ -6,11 +6,11 @@ import Navigation from 'swiper/esm/components/navigation/navigation'
 
 /**
  * Default Swiper modules
- * @type {Object<Object>}
+ * @type {Array<Object>}
  */
-export const DEFAULT_MODULES = {
+export const DEFAULT_MODULES = [
   Navigation
-}
+]
 
 /**
  * Default Swiper config
@@ -80,9 +80,8 @@ export default class Slider extends Component {
    * @param {Object} opts
    * @param {Object<string, String>} opts.classlist
    * @param {Object} opts.config
-   * @param {Object} opts.modules
    */
-  run({ classlist = {}, config = {}, modules = {} } = {}) {
+  run({ classlist = {}, config = {} } = {}) {
     /**
      * Swiper instance
      * @type {Swiper}
@@ -111,11 +110,6 @@ export default class Slider extends Component {
      * @type {Object}
      */
     this.config = Object.assign({}, DEFAULT_CONFIG, config)
-
-    /**
-     * Swiper modules
-     */
-    this.modules = Object.assign({}, DEFAULT_MODULES, modules)
 
     /**
      * Element's CSS classes
@@ -179,6 +173,7 @@ export default class Slider extends Component {
    */
   createSlider() {
     // set default necessary config values
+    this.config.modules = this.config.modules || this.DEFAULT_MODULES
     this.config.watchSlidesVisibility = true
     this.config.navigation = this.config.navigation || {
       prevEl: `.${this.classlist.prev}`,
@@ -195,9 +190,6 @@ export default class Slider extends Component {
       nextSlideMessage: this.arialLabels.nextSlide,
       paginationBulletMessage: this.arialLabels.paginationBullet + ' {{index}}'
     }
-
-    // set Swiper modules
-    Swiper.use(Object.values(this.modules))
 
     // instanciate with config
     this.swiper = new Swiper(this.el, this.config)
