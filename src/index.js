@@ -4,17 +4,6 @@ import hotkeys from 'hotkeys-js'
 import Swiper, { A11y, Autoplay, Navigation, Pagination } from 'swiper'
 
 /**
- * Default Swiper modules
- * @type {Array<Object>}
- */
-export const DEFAULT_MODULES = [
-  A11y,
-  Autoplay,
-  Navigation,
-  Pagination
-]
-
-/**
  * Default Swiper config
  * @type {Object<string, String>}
  */
@@ -173,36 +162,39 @@ export default class Slider extends Component {
    * Instanciate Swiper
    */
   createSlider() {
-    // set default necessary config values
-    this.config.modules = this.config.modules || this.DEFAULT_MODULES
-    
     this.config.watchSlidesProgress = true
 
-    if (~this.config.modules.indexOf(A11y)) {
-      this.config.a11y = this.config.a11y || {
-        prevSlideMessage: this.arialLabels.prevSlide,
-        nextSlideMessage: this.arialLabels.nextSlide,
-        paginationBulletMessage: this.arialLabels.paginationBullet + ' {{index}}'
+    if (this.config.modules && Array.isArray(this.config.modules)) {
+      // Get or set default values for A11y
+      if (!!~this.config.modules.indexOf(A11y)) {
+        this.config.a11y = this.config.a11y || {
+          prevSlideMessage: this.arialLabels.prevSlide,
+          nextSlideMessage: this.arialLabels.nextSlide,
+          paginationBulletMessage: this.arialLabels.paginationBullet + ' {{index}}'
+        }
       }
-    }
-
-    if (~this.config.modules.indexOf(Autoplay)) {
-      this.config.autoplay = this.config.autoplay || true
-    }
-
-    if (~this.config.modules.indexOf(Navigation)) {
-      this.config.navigation = this.config.navigation || {
-        prevEl: `.${this.classlist.prev}`,
-        nextEl: `.${this.classlist.next}`
+  
+      // Get or set default values for Autoplay
+      if (!!~this.config.modules.indexOf(Autoplay)) {
+        this.config.autoplay = this.config.autoplay || true
       }
-    }
-
-    if (~this.config.modules.indexOf(Pagination)) {
-      this.config.pagination = this.config.pagination || {
-        el: `.${this.classlist.pagination}`,
-        type: 'bullets',
-        bulletElement: 'button',
-        clickable: true
+  
+      // Get or set default values for Navigation
+      if (!!~this.config.modules.indexOf(Navigation)) {
+        this.config.navigation = this.config.navigation || {
+          prevEl: `.${this.classlist.prev}`,
+          nextEl: `.${this.classlist.next}`
+        }
+      }
+  
+      // Get or set default values for Pagination
+      if (!!~this.config.modules.indexOf(Pagination)) {
+        this.config.pagination = this.config.pagination || {
+          el: `.${this.classlist.pagination}`,
+          type: 'bullets',
+          bulletElement: 'button',
+          clickable: true
+        }
       }
     }
 
