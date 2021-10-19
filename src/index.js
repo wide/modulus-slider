@@ -246,7 +246,7 @@ export default class Slider extends Component {
     // set aria-hidden and tabindex
     const slides = this.children(`.${this.classlist.slide}`)
 
-    for(let i = 0; i < slides.length; i++) {
+    for (let i = 0; i < slides.length; i++) {
       // to slide
       const slide = slides[i]
       // Set aria hidden
@@ -268,13 +268,13 @@ export default class Slider extends Component {
     }
 
     // set focus on active slide
-    if(this.manualChange) {
+    if (this.manualChange) {
       this.el.querySelector(`.${this.classlist.slideActive}`).focus()
       this.manualChange = false
     }
 
     // set pagin bullet label
-    for(let i = 0; i < this.els.bullets.length; i++) {
+    for (let i = 0; i < this.els.bullets.length; i++) {
       const label = this.els.bullets[i].classList.contains(this.classlist.bulletActive)
         ? `${this.arialLabels.paginationBullet} ${i+1} ${this.arialLabels.paginationBulletActive}`
         : `${this.arialLabels.paginationBullet} ${i+1}`
