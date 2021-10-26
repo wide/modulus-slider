@@ -1,11 +1,12 @@
 {
   "name": "@wide/modulus-slider",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "license": "MIT",
   "author": "Aymeric Assier (https://github.com/myeti)",
   "contributors": [
     "Aymeric Assier (https://github.com/myeti)",
-    "Julien Martins Da Costa (https://github.com/jdacosta)"
+    "Julien Martins Da Costa (https://github.com/jdacosta)",
+    "Sébastien Robillard (https://github.com/robiseb)"
   ],
   "repository": {
     "type": "git",
@@ -22,7 +23,7 @@
   "dependencies": {
     "@wide/modulus": "^2.1.1",
     "hotkeys-js": "^3.8.7",
-    "swiper": "^6.8.0"
+    "swiper": "^7.0.8"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.8",

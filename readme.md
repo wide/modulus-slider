@@ -23,22 +23,27 @@ modulus.component('slider', Slider)
 Import base `scss` styles (contains `Swiper` styles):
 ```scss
 @use '@wide/modulus-slider';
+@use 'node_modules/swiper/modules/pagination/pagination.scss';
 ```
 
 And use the provided `twig` template:
 ```html
 {% include '@wide::modulus-slider' with {
+  webcomponent: true,
   slides: [
     'Some HTML',
     'Some HTML again'
   ],
-  sync: '#slider2'
+  pagination: true,
+  dataset: {
+    sync: '#slider2'
+  }
 } %}
 ```
 
 Or build your own `html`:
 ```html
-<div class="slider swiper-container" is="slider" data-sync="#slider2">
+<div class="slider swiper" is="slider" data-sync="#slider2">
     <div class="swiper-wrapper">
         <div class="slider_slide swiper-slide">
             Some HTML
@@ -47,51 +52,29 @@ Or build your own `html`:
             Some HTML again
         </div>
     </div>
+    <div class="slider_pagination swiper-pagination"></div>
 </div>
 ```
 
 
 ## Advanced usage
 
-Extend the `Slider` class and change the configuration (see [Swiper docs](https://swiperjs.com)):
+Extend the `Slider` class and change the configuration (see [Swiper API](https://swiperjs.com/swiper-api)):
 ```js
+import modulus from '@wide/modulus'
 import Slider from '@wide/modulus-slider'
+import { Pagination } from 'swiper'
 
-class MySlider extends Slider {
-
+modulus.component('slider', class extends Slider {
     run() {
-        super.run({
-            slidesPerView: 1
-        })
+        const config = {
+          slidesPerView: 1,
+          modules: [ Pagination ]
+        }
+        super.run({ config })
     }
-
 }
 ```
-
-Or programmatically instanciate a slider:
-```js
-import Slider from '@wide/modulus-slider'
-import Pagination from 'swiper/esm/components/pagination/pagination'
-
-const DEFAULT_CLASSLIST = {
-  prev: 'swiper-button-prev',
-  next: 'swiper-button-next'
-}
-
-const DEFAULT_CONFIG = {
-  autoplay: false
-}
-
-const DEFAULT_MODULES = {
-  Pagination
-}
-
-const slider = Slider.create(el, name, DEFAULT_CLASSLIST, DEFAULT_CONFIG, DEFAULT_MODULES) 
-```
-
-
-
-## 
 
 
 ## Libraries
@@ -105,6 +88,7 @@ This package uses :
 
 - **Aymeric Assier** - [github.com/myeti](https://github.com/myeti)
 - **Julien Martins Da Costa** - [github.com/jdacosta](https://github.com/jdacosta)
+- **Sébastien Robillard** - [github.com/robiseb](https://github.com/robiseb)
 
 
 ## License
