@@ -26,6 +26,7 @@ export const DEFAULT_CLASSLIST = {
   slide:        'swiper-slide',
   slideVisible: 'swiper-slide-visible',
   slideActive:  'swiper-slide-active',
+  scrollbar:    'swiper-scrollbar'
 }
 
 /**

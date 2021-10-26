@@ -1,10 +1,17 @@
 {% set component = component | default('slider') %}
 {% set webcomponent = webcomponent | default(false) %}
 {% set classlist = { 
-  main:     'slider swiper',
-  wrapper:  'swiper-wrapper',
-  slide:    'slider_slide swiper-slide'
+  main:       'slider swiper',
+  wrapper:    'swiper-wrapper',
+  slide:      'slider_slide swiper-slide',
+  pagination: 'slider_pagination swiper-pagination',
+  next:       'slider_button swiper-button-next',
+  prev:       'slider_button swiper-button-prev',
+  scrollbar:  'slider_scrollbar swiper-scrollbar',
 } | merge(classlist | default({})) %}
+{% set pagination = pagination | default(false) %}
+{% set navigation = navigation | default(false) %}
+{% set scrollbar = scrollbar | default(false) %}
 
 {% set tagstart = webcomponent ?: ('div is="' ~ component ~ '"') %}
 {% set tagend = webcomponent ?: 'div' %}
@@ -20,4 +27,17 @@
       {% endfor %}
     {% endblock %}
   </div>
+
+  {% if pagination %}
+    <div class="{{ classlist.pagination }}"></div>
+  {% endif %}
+
+  {% if navigation %}
+    <div class="{{ classlist.prev }}"></div>
+    <div class="{{ classlist.next }}"></div>
+  {% endif %}
+
+  {% if scrollbar %}
+    <div class="{{ classlist.scrollbar }}"></div>
+  {% endif %}
 </{{ tagend }}>
