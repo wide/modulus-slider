@@ -1,16 +1,7 @@
 import Component from '@wide/modulus/lib/component'
 import { seek } from '@wide/modulus'
 import hotkeys from 'hotkeys-js'
-import Swiper from 'swiper/esm/components/core/core-class'
-import Navigation from 'swiper/esm/components/navigation/navigation'
-
-/**
- * Default Swiper modules
- * @type {Object<Object>}
- */
-export const DEFAULT_MODULES = {
-  Navigation
-}
+import Swiper, { A11y, Autoplay, Navigation, Pagination } from 'swiper'
 
 /**
  * Default Swiper config
@@ -18,7 +9,6 @@ export const DEFAULT_MODULES = {
  */
 export const DEFAULT_CONFIG = {
   loop: true,
-  autoplay: true,
   spaceBetween: 40,
   slidesPerView: 3
 }
@@ -36,6 +26,7 @@ export const DEFAULT_CLASSLIST = {
   slide:        'swiper-slide',
   slideVisible: 'swiper-slide-visible',
   slideActive:  'swiper-slide-active',
+  scrollbar:    'swiper-scrollbar'
 }
 
 /**
@@ -80,9 +71,8 @@ export default class Slider extends Component {
    * @param {Object} opts
    * @param {Object<string, String>} opts.classlist
    * @param {Object} opts.config
-   * @param {Object} opts.modules
    */
-  run({ classlist = {}, config = {}, modules = {} } = {}) {
+  run({ classlist = {}, config = {} } = {}) {
     /**
      * Swiper instance
      * @type {Swiper}
@@ -111,11 +101,6 @@ export default class Slider extends Component {
      * @type {Object}
      */
     this.config = Object.assign({}, DEFAULT_CONFIG, config)
-
-    /**
-     * Swiper modules
-     */
-    this.modules = Object.assign({}, DEFAULT_MODULES, modules)
 
     /**
      * Element's CSS classes
@@ -178,26 +163,41 @@ export default class Slider extends Component {
    * Instanciate Swiper
    */
   createSlider() {
-    // set default necessary config values
-    this.config.watchSlidesVisibility = true
-    this.config.navigation = this.config.navigation || {
-      prevEl: `.${this.classlist.prev}`,
-      nextEl: `.${this.classlist.next}`
-    }
-    this.config.pagination = this.config.pagination || {
-      el: `.${this.classlist.pagination}`,
-      type: 'bullets',
-      bulletElement: 'button',
-      clickable: true
-    }
-    this.config.a11y = this.config.a11y || {
-      prevSlideMessage: this.arialLabels.prevSlide,
-      nextSlideMessage: this.arialLabels.nextSlide,
-      paginationBulletMessage: this.arialLabels.paginationBullet + ' {{index}}'
-    }
+    this.config.watchSlidesProgress = true
 
-    // set Swiper modules
-    Swiper.use(Object.values(this.modules))
+    if (this.config.modules && Array.isArray(this.config.modules)) {
+      // Get or set default values for A11y
+      if (!!~this.config.modules.indexOf(A11y)) {
+        this.config.a11y = this.config.a11y || {
+          prevSlideMessage: this.arialLabels.prevSlide,
+          nextSlideMessage: this.arialLabels.nextSlide,
+          paginationBulletMessage: this.arialLabels.paginationBullet + ' {{index}}'
+        }
+      }
+  
+      // Get or set default values for Autoplay
+      if (!!~this.config.modules.indexOf(Autoplay)) {
+        this.config.autoplay = this.config.autoplay || true
+      }
+  
+      // Get or set default values for Navigation
+      if (!!~this.config.modules.indexOf(Navigation)) {
+        this.config.navigation = this.config.navigation || {
+          prevEl: `.${this.classlist.prev}`,
+          nextEl: `.${this.classlist.next}`
+        }
+      }
+  
+      // Get or set default values for Pagination
+      if (!!~this.config.modules.indexOf(Pagination)) {
+        this.config.pagination = this.config.pagination || {
+          el: `.${this.classlist.pagination}`,
+          type: 'bullets',
+          bulletElement: 'button',
+          clickable: true
+        }
+      }
+    }
 
     // instanciate with config
     this.swiper = new Swiper(this.el, this.config)
@@ -222,9 +222,10 @@ export default class Slider extends Component {
    * Sync with another swiper
    */
   syncControl() {
-    if(this.dataset.sync && !this.swiper.params.controller) {
+    if (this.dataset.sync && !this.swiper.params.controller) {
       const other = seek(this.name, this.dataset.sync)
-      if(other) {
+
+      if (other) {
         this.swiper.params.controller = { control: other.swiper }
       }
     }
@@ -237,8 +238,8 @@ export default class Slider extends Component {
   onSlideChange() {
     // set aria-hidden and tabindex
     const slides = this.children(`.${this.classlist.slide}`)
-    for(let i = 0; i < slides.length; i++) {
 
+    for (let i = 0; i < slides.length; i++) {
       // to slide
       const slide = slides[i]
       // Set aria hidden
@@ -260,13 +261,13 @@ export default class Slider extends Component {
     }
 
     // set focus on active slide
-    if(this.manualChange) {
+    if (this.manualChange) {
       this.el.querySelector(`.${this.classlist.slideActive}`).focus()
       this.manualChange = false
     }
 
     // set pagin bullet label
-    for(let i = 0; i < this.els.bullets.length; i++) {
+    for (let i = 0; i < this.els.bullets.length; i++) {
       const label = this.els.bullets[i].classList.contains(this.classlist.bulletActive)
         ? `${this.arialLabels.paginationBullet} ${i+1} ${this.arialLabels.paginationBulletActive}`
         : `${this.arialLabels.paginationBullet} ${i+1}`
@@ -280,6 +281,7 @@ export default class Slider extends Component {
    */
   flagManualChange() {
     this.swiper.on('touchEnd', e => this.manualChange = true)
+
     for (let prop in this.els) {
       if (this.els[prop] instanceof HTMLElement) {
         this.els[prop].addEventListener('click', e => this.manualChange = true)
