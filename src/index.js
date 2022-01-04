@@ -262,7 +262,7 @@ export default class Slider extends Component {
 
     // set focus on active slide
     if (this.manualChange) {
-      this.el.querySelector(`.${this.classlist.slideActive}`).focus()
+      this.el.querySelector(`.${this.classlist.slideActive}`)?.focus()
       this.manualChange = false
     }
 
