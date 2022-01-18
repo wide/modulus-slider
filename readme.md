@@ -23,6 +23,10 @@ modulus.component('slider', Slider)
 Import base `scss` styles (contains `Swiper` styles):
 ```scss
 @use '@wide/modulus-slider';
+/**
+ * Add pagination module for this example
+ * @tutorial https://swiperjs.com/swiper-api#modules
+ */
 @use 'node_modules/swiper/modules/pagination/pagination.scss';
 ```
 
@@ -63,6 +67,10 @@ Extend the `Slider` class and change the configuration (see [Swiper API](https:/
 ```js
 import modulus from '@wide/modulus'
 import Slider from '@wide/modulus-slider'
+/**
+ * Add pagination module for this example
+ * @tutorial https://swiperjs.com/swiper-api#modules
+ */
 import { Pagination } from 'swiper'
 
 modulus.component('slider', class extends Slider {

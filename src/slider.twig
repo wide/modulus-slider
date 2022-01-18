@@ -11,6 +11,8 @@
 } | merge(classlist | default({})) %}
 {% set pagination = pagination | default(false) %}
 {% set navigation = navigation | default(false) %}
+{% set navigationPrev = navigationPrev | default('<') %}
+{% set navigationNext = navigationNext | default('>') %}
 {% set scrollbar = scrollbar | default(false) %}
 
 {% set tagstart = webcomponent ?: ('div is="' ~ component ~ '"') %}
@@ -33,8 +35,8 @@
   {% endif %}
 
   {% if navigation %}
-    <div class="{{ classlist.prev }}"></div>
-    <div class="{{ classlist.next }}"></div>
+    <button class="{{ classlist.prev }}" type="button" role="button">{{ navigationPrev | raw }}</button>
+    <button class="{{ classlist.next }}" type="button" role="button">{{ navigationNext | raw }}</button>
   {% endif %}
 
   {% if scrollbar %}
