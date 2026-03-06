@@ -23,7 +23,7 @@
   "dependencies": {
     "@wide/modulus": "^2.1.1",
     "hotkeys-js": "^3.8.7",
-    "swiper": "^7.0.8"
+    "swiper": "^12.1.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.8",
